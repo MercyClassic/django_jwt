@@ -80,6 +80,7 @@ DJANGO_JWT_SETTINGS = {
 **<h3> The most interesting attribute is `EXTRA_ATTRS_FUNC` </h3>**
 **<h4> This attribute allows you to add extra data in request.user (dict) </h4>**
 **<h4> You need to make function that returns dict with extra data </h4>**
+**<h4> The user_id attribute will be passed to your function, so you need to define argument `user_id=...` or use `**kwargs` in your func </h4>**
 **<h4> Then you need to pass module and func name to the `EXTRA_ATTRS_FUNC` like this: </h4>**
 ```python
 DJANGO_JWT_SETTINGS = {
