@@ -19,11 +19,11 @@ class JWTTests(APITestCase):
             self,
             data: dict,
             status_code: int,
-            with_token_headers: bool,
+            with_token_data: bool,
     ) -> bool:
         response = self.client.post(path=reverse('api-jwt-login'), data=data)
-        assert bool(response.cookies.get('refresh_token')) is with_token_headers
-        assert bool(response.cookies.get('access_token')) is with_token_headers
+        assert bool(response.cookies.get('refresh_token')) is with_token_data
+        assert bool(response.data.get('access_token')) is with_token_data
         return response.status_code == status_code
 
     def test_login(self):
@@ -33,7 +33,7 @@ class JWTTests(APITestCase):
                 'password': 'test',
             },
             status_code=404,
-            with_token_headers=False,
+            with_token_data=False,
         )
         assert self.parametrized_login(
             data={
@@ -41,7 +41,7 @@ class JWTTests(APITestCase):
                 'password': 'wrong password',
             },
             status_code=401,
-            with_token_headers=False,
+            with_token_data=False,
         )
         """ ALL DATA IS VALID """
         assert self.parametrized_login(
@@ -50,7 +50,7 @@ class JWTTests(APITestCase):
                 'password': 'test',
             },
             status_code=200,
-            with_token_headers=True,
+            with_token_data=True,
         )
 
     def test_logout(self):
@@ -80,7 +80,6 @@ class JWTTests(APITestCase):
         response = self.client.post(reverse('api-jwt-logout'))
         assert response.status_code == 200
         assert self.client.cookies.get('refresh_token') == response.cookies.get('refresh_token')
-        assert self.client.cookies.get('access_token') == response.cookies.get('access_token')
 
     def test_auth_backend(self):
         response = self.client.get(reverse('api-test-auth-backend'))
